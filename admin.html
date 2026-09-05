@@ -3,19 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard | MyAhsan Villa</title>
+    <title>Admin Dashboard | Ahsanvila</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Supabase Client CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
-<body class="bg-slate-100 text-slate-800 flex items-center justify-center h-screen">
+<body class="bg-slate-100 text-slate-800 flex items-center justify-center min-h-screen p-6">
 
     <!-- Login Box -->
     <div id="login-box" class="bg-white p-8 rounded-2xl shadow-md w-full max-w-md">
-        <h2 class="text-2xl font-bold mb-6 text-center">Admin Access</h2>
+        <h2 class="text-2xl font-bold mb-2 text-center">Ahsanvila Admin Login</h2>
+        <p class="text-xs text-slate-400 text-center mb-6">Manage your 4 rental flats</p>
         <form id="login-form" class="space-y-4">
             <div>
-                <label class="block text-sm font-medium text-slate-600 mb-1">Email</label>
+                <label class="block text-sm font-medium text-slate-600 mb-1">Admin Email</label>
                 <input type="email" id="email" required class="w-full px-4 py-2 border rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none">
             </div>
             <div>
@@ -24,38 +24,71 @@
             </div>
             <button type="submit" class="w-full bg-emerald-600 text-white py-2 rounded-xl font-medium hover:bg-emerald-700 transition">Log In</button>
         </form>
+        <div class="mt-4 text-center">
+            <a href="index.html" class="text-xs text-slate-500 hover:underline">&larr; Back to Home</a>
+        </div>
     </div>
 
-    <!-- Dashboard Panel (Hidden by default) -->
-    <div id="dashboard" class="hidden bg-white p-8 rounded-2xl shadow-md w-full max-w-2xl">
+    <!-- Dashboard Panel (Hidden Until Logged In) -->
+    <div id="dashboard" class="hidden bg-white p-8 rounded-2xl shadow-md w-full max-w-xl">
         <div class="flex justify-between items-center mb-6">
-            <h2 class="text-2xl font-bold">Rental Upload Manager</h2>
+            <div>
+                <h2 class="text-xl font-bold">Ahsanvila Flat Manager</h2>
+                <p class="text-xs text-slate-500">Update flat status, pricing, and details</p>
+            </div>
             <button id="logout-btn" class="text-rose-600 text-sm font-medium hover:underline">Log Out</button>
         </div>
+        
         <form id="upload-form" class="space-y-4">
             <div>
-                <label class="block text-sm font-medium text-slate-600 mb-1">Item Title</label>
-                <input type="text" id="item-title" required class="w-full px-4 py-2 border rounded-xl">
+                <label class="block text-sm font-medium text-slate-600 mb-1">Select Flat</label>
+                <select id="flat-number" required class="w-full px-4 py-2 border rounded-xl outline-none focus:ring-2 focus:ring-emerald-500 bg-white">
+                    <option value="Flat 201">2nd Floor - Flat 201</option>
+                    <option value="Flat 202">2nd Floor - Flat 202</option>
+                    <option value="Flat 301">3rd Floor - Flat 301</option>
+                    <option value="Flat 302">3rd Floor - Flat 302</option>
+                </select>
             </div>
+
             <div>
-                <label class="block text-sm font-medium text-slate-600 mb-1">Description & Price</label>
-                <textarea id="item-desc" required class="w-full px-4 py-2 border rounded-xl"></textarea>
+                <label class="block text-sm font-medium text-slate-600 mb-1">Flat Title</label>
+                <input type="text" id="item-title" placeholder="e.g., Luxury 1100 Sq Ft Apartment" required class="w-full px-4 py-2 border rounded-xl outline-none focus:ring-2 focus:ring-emerald-500">
             </div>
-            <button type="submit" class="bg-slate-900 text-white px-6 py-2 rounded-xl font-medium hover:bg-slate-800">Publish Item</button>
+
+            <div>
+                <label class="block text-sm font-medium text-slate-600 mb-1">Monthly Rent Amount</label>
+                <input type="text" id="item-price" placeholder="e.g., ৳25,000" required class="w-full px-4 py-2 border rounded-xl outline-none focus:ring-2 focus:ring-emerald-500">
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-slate-600 mb-1">Availability Status</label>
+                <select id="flat-status" required class="w-full px-4 py-2 border rounded-xl outline-none focus:ring-2 focus:ring-emerald-500 bg-white">
+                    <option value="Free For Rent">Free For Rent</option>
+                    <option value="Occupied">Occupied</option>
+                </select>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-slate-600 mb-1">Description</label>
+                <textarea id="item-desc" rows="3" placeholder="Details about rooms, facilities, deep tubewell water access, etc." required class="w-full px-4 py-2 border rounded-xl outline-none focus:ring-2 focus:ring-emerald-500"></textarea>
+            </div>
+
+            <button type="submit" class="w-full bg-slate-900 text-white py-2.5 rounded-xl font-medium hover:bg-slate-800 transition">Save Flat Update</button>
         </form>
     </div>
 
     <script>
-        // Initialize Supabase (Replace with your actual keys from Supabase project settings)
-        const SUPABASE_URL = 'https://qnojuhdoarwosqxjfpdv.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFub2p1aGRvYXJ3b3NxeGpmcGR2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg2MDk1MTgsImV4cCI6MjEwNDE4NTUxOH0.ruKw1iNnwuygLWrHDs2RZtC6riaJ0t0MCzEz4wcKtCo';
+        // REPLACE WITH YOUR ACTUAL SUPABASE CREDENTIALS
+        const SUPABASE_URL = 'YOUR_SUPABASE_URL';
+        const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         const loginBox = document.getElementById('login-box');
         const dashboard = document.getElementById('dashboard');
         const loginForm = document.getElementById('login-form');
+        const uploadForm = document.getElementById('upload-form');
+        const logoutBtn = document.getElementById('logout-btn');
 
-        // Handle Login Submission
         loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const email = document.getElementById('email').value;
@@ -67,6 +100,30 @@
             } else {
                 toggleView(true);
             }
+        });
+
+        uploadForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const flat_number = document.getElementById('flat-number').value;
+            const title = document.getElementById('item-title').value;
+            const price = document.getElementById('item-price').value;
+            const status = document.getElementById('flat-status').value;
+            const description = document.getElementById('item-desc').value;
+
+            // Upsert / Insert flat details into database
+            const { error } = await supabaseClient.from('rentals').insert([{ flat_number, title, price, status, description }]);
+            
+            if (error) {
+                alert('Error updating flat: ' + error.message);
+            } else {
+                alert('Flat details updated successfully!');
+                uploadForm.reset();
+            }
+        });
+
+        logoutBtn.addEventListener('click', async () => {
+            await supabaseClient.auth.signOut();
+            toggleView(false);
         });
 
         function toggleView(isLoggedIn) {
