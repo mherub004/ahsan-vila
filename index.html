@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ahsanvila | Apartments & Rentals</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans">
+    
+    <!-- Navigation -->
+    <nav class="max-w-6xl mx-auto p-6 flex justify-between items-center">
+        <h1 class="text-2xl font-bold bg-gradient-to-r from-emerald-600 to-teal-500 bg-clip-text text-transparent" data-en="Ahsanvila" data-bn="আহসানভিলা">Ahsanvila</h1>
+        <div class="flex items-center gap-4">
+            <!-- Language Switcher Toggle -->
+            <button id="lang-toggle" onclick="toggleLanguage()" class="bg-slate-200 text-slate-700 px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-slate-300 transition">
+                বাংলা / English
+            </button>
+            <a href="https://share.google/mqbPSG9BZZpaEQR68" target="_blank" class="text-sm font-medium text-emerald-600 hover:underline" data-en="📍 Google Maps" data-bn="📍 গুগল ম্যাপস">📍 Google Maps</a>
+            <a href="admin.html" class="bg-emerald-600 text-white px-4 py-2 rounded-lg text-sm shadow hover:bg-emerald-700 transition" data-en="Admin Login" data-bn="অ্যাডমিন লগইন">Admin Login</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="max-w-6xl mx-auto px-6 py-12 grid md:grid-cols-2 gap-8 items-center">
+        <div>
+            <span class="bg-emerald-100 text-emerald-800 text-xs font-semibold px-3 py-1 rounded-full" data-en="3-Story Residential Building" data-bn="৩-তলা আবাসিক ভবন">3-Story Residential Building</span>
+            <h2 class="text-4xl font-extrabold mt-4 mb-6 leading-tight" data-en="Welcome to Ahsanvila Apartments" data-bn="আহসানভিলা অ্যাপার্টমেন্টে স্বাগতম">Welcome to Ahsanvila Apartments</h2>
+            <p class="text-slate-600 mb-6" data-en="A modern 3-story building featuring 4 exclusive rental apartments (1100 sq ft each). Fully equipped with electricity, water supply, and an independent 1000-feet deep tubewell. Explore available flats below." data-bn="একটি আধুনিক ৩-তলা ভবন যাতে ৪টি এক্সক্লুসিভ ভাড়ার ফ্ল্যাট (প্রতিটি ১১০০ বর্গফিট) রয়েছে। বিদ্যুৎ, পানি এবং নিজস্ব ১০০০ ফুট গভীর টিউবওয়েলের সুব্যবস্থা রয়েছে। নিচে উপলব্ধ ফ্ল্যাটগুলো দেখুন।">A modern 3-story building featuring 4 exclusive rental apartments (1100 sq ft each). Fully equipped with electricity, water supply, and an independent 1000-feet deep tubewell. Explore available flats below.</p>
+            <div class="flex flex-wrap gap-3">
+                <a href="#flats" class="bg-slate-900 text-white px-6 py-3 rounded-xl font-medium shadow hover:bg-slate-800 transition" data-en="View 4 Rental Flats" data-bn="৪টি ভাড়ার ফ্ল্যাট দেখুন">View 4 Rental Flats</a>
+                <a href="#contact" class="bg-emerald-600 text-white px-6 py-3 rounded-xl font-medium shadow hover:bg-emerald-700 transition" data-en="Contact Landlord" data-bn="মালিকের সাথে যোগাযোগ করুন">Contact Landlord</a>
+            </div>
+        </div>
+        <div class="bg-emerald-100 border-2 border-dashed border-emerald-300 h-72 rounded-2xl flex flex-col items-center justify-center text-emerald-800 font-semibold p-6 text-center shadow-inner">
+            <span class="text-3xl mb-2">🏢</span>
+            <span data-en="Ahsanvila Building" data-bn="আহসানভিলা বিল্ডিং">Ahsanvila Building</span>
+            <span class="text-xs font-normal text-slate-500 mt-1" data-en="Ground Floor + 2nd & 3rd Floors (4 Rental Flats, 1100 sq ft each)" data-bn="নিচ তলা + ২য় ও ৩য় তলা (৪টি ভাড়ার ফ্ল্যাট, প্রতিটি ১১০০ বর্গফিট)">Ground Floor + 2nd & 3rd Floors (4 Rental Flats, 1100 sq ft each)</span>
+        </div>
+    </header>
+
+    <!-- The 4 Dedicated Rental Flats Section -->
+    <section id="flats" class="max-w-6xl mx-auto px-6 py-12">
+        <h3 class="text-2xl font-bold mb-2" data-en="Building Structure & 4 Rental Flats" data-bn="বিল্ডিং স্ট্রাকচার এবং ৪টি ভাড়ার ফ্ল্যাট">Building Structure & 4 Rental Flats</h3>
+        <p class="text-slate-500 text-sm mb-8" data-en="Ground Floor is owner/common space. Floors 2 and 3 house the 4 rental units (1100 sq ft each) with dependable electricity and deep tubewell water." data-bn="নিচ তলা মালিক/সাধারণ ব্যবহারের জন্য। ২য় এবং ৩য় তলায় ৪টি ভাড়ার ফ্ল্যাট রয়েছে (প্রতিটি ১১০০ বর্গফিট) এবং বিদ্যুৎ ও গভীর টিউবওয়েলের সুব্যবস্থা রয়েছে।">Ground Floor is owner/common space. Floors 2 and 3 house the 4 rental units (1100 sq ft each) with dependable electricity and deep tubewell water.</p>
+        
+        <div class="grid sm:grid-cols-2 gap-6">
+            <!-- Flat 201 -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col justify-between">
+                <div>
+                    <div class="bg-slate-100 h-48 rounded-xl mb-4 flex items-center justify-center text-slate-400 font-medium" data-en="[ Flat 201 Photo: 1100 sq ft ]" data-bn="[ ফ্ল্যাট ২০১ ছবি: ১১০০ বর্গফিট ]">[ Flat 201 Photo: 1100 sq ft ]</div>
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="bg-emerald-50 text-emerald-700 text-xs font-bold px-2.5 py-1 rounded" data-en="2nd Floor - Flat 201" data-bn="২য় তলা - ফ্ল্যাট ২০১">2nd Floor - Flat 201</span>
+                        <span id="badge-201" class="bg-emerald-100 text-emerald-800 text-xs font-bold px-2.5 py-1 rounded-full" data-en="Free For Rent" data-bn="ভাড়ার জন্য খালি">Free For Rent</span>
+                    </div>
+                    <h4 class="font-bold text-xl mt-1" data-en="Luxury 1100 Sq Ft Apartment" data-bn="আরামদায়ক ১১০০ বর্গফিটের অ্যাপার্টমেন্ট">Luxury 1100 Sq Ft Apartment</h4>
+                    <p class="text-slate-500 text-sm mt-1" data-en="Spacious layout with constant utility access from 1000ft deep tubewell." data-bn="১০০০ ফুট গভীর টিউবওয়েলের সুপেয় পানি ও নিরবচ্ছিন্ন বিদ্যুৎ সুবিধাসহ প্রশস্ত ফ্ল্যাট।">Spacious layout with constant utility access from 1000ft deep tubewell.</p>
+                </div>
+                <div class="mt-6 pt-4 border-t border-slate-100 flex justify-between items-center">
+                    <div>
+                        <span class="text-xs text-slate-400 block" data-en="Monthly Rent" data-bn="মাসিক ভাড়া">Monthly Rent</span>
+                        <span class="font-extrabold text-lg text-slate-800">৳25,000 <span class="text-xs font-normal text-slate-500" data-en="/ month" data-bn="/ মাস">/ month</span></span>
+                    </div>
+                    <a href="#contact" class="bg-slate-900 text-white px-4 py-2 rounded-xl text-xs font-semibold hover:bg-slate-800 transition" data-en="Inquire" data-bn="যোগাযোগ করুন">Inquire</a>
+                </div>
+            </div>
+
+            <!-- Flat 202 -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col justify-between">
+                <div>
+                    <div class="bg-slate-100 h-48 rounded-xl mb-4 flex items-center justify-center text-slate-400 font-medium" data-en="[ Flat 202 Photo: 1100 sq ft ]" data-bn="[ ফ্ল্যাট ২০২ ছবি: ১১০০ বর্গফিট ]">[ Flat 202 Photo: 1100 sq ft ]</div>
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="bg-emerald-50 text-emerald-700 text-xs font-bold px-2.5 py-1 rounded" data-en="2nd Floor - Flat 202" data-bn="২য় তলা - ফ্ল্যাট ২০২">2nd Floor - Flat 202</span>
+                        <span id="badge-202" class="bg-rose-100 text-rose-800 text-xs font-bold px-2.5 py-1 rounded-full" data-en="Occupied" data-bn="ভাড়া দেওয়া আছে">Occupied</span>
+                    </div>
+                    <h4 class="font-bold text-xl mt-1" data-en="Premium 1100 Sq Ft Apartment" data-bn="প্রিমিয়াম ১১০০ বর্গফিটের অ্যাপার্টমেন্ট">Premium 1100 Sq Ft Apartment</h4>
+                    <p class="text-slate-500 text-sm mt-1" data-en="Corner unit with great ventilation, water, and electricity." data-bn="কোনা ফ্ল্যাট, চমৎকার বাতাস, পানি ও বিদ্যুতের সুব্যবস্থা।">Corner unit with great ventilation, water, and electricity.</p>
+                </div>
+                <div class="mt-6 pt-4 border-t border-slate-100 flex justify-between items-center">
+                    <div>
+                        <span class="text-xs text-slate-400 block" data-en="Monthly Rent" data-bn="মাসিক ভাড়া">Monthly Rent</span>
+                        <span class="font-extrabold text-lg text-slate-800">৳26,000 <span class="text-xs font-normal text-slate-500" data-en="/ month" data-bn="/ মাস">/ month</span></span>
+                    </div>
+                    <a href="#contact" class="bg-slate-900 text-white px-4 py-2 rounded-xl text-xs font-semibold hover:bg-slate-800 transition" data-en="Inquire" data-bn="যোগাযোগ করুন">Inquire</a>
+                </div>
+            </div>
+
+            <!-- Flat 301 -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col justify-between">
+                <div>
+                    <div class="bg-slate-100 h-48 rounded-xl mb-4 flex items-center justify-center text-slate-400 font-medium" data-en="[ Flat 301 Photo: 1100 sq ft ]" data-bn="[ ফ্ল্যাট ৩০১ ছবি: ১১০০ বর্গফিট ]">[ Flat 301 Photo: 1100 sq ft ]</div>
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="bg-emerald-50 text-emerald-700 text-xs font-bold px-2.5 py-1 rounded" data-en="3rd Floor - Flat 301" data-bn="৩য় তলা - ফ্ল্যাট ৩০১">3rd Floor - Flat 301</span>
+                        <span id="badge-301" class="bg-emerald-100 text-emerald-800 text-xs font-bold px-2.5 py-1 rounded-full" data-en="Free For Rent" data-bn="ভাড়ার জন্য খালি">Free For Rent</span>
+                    </div>
+                    <h4 class="font-bold text-xl mt-1" data-en="Scenic View 1100 Sq Ft Flat" data-bn="সুন্দর ভিউ সহ ১১০০ বর্গফিটের ফ্ল্যাট">Scenic View 1100 Sq Ft Flat</h4>
+                    <p class="text-slate-500 text-sm mt-1" data-en="Top-floor apartment featuring strong water flow and reliable utilities." data-bn="টপ ফ্লোর অ্যাপার্টমেন্ট, পর্যাপ্ত পানির প্রবাহ ও নির্ভরযোগ্য ইউটিলিটি সুবিধা।">Top-floor apartment featuring strong water flow and reliable utilities.</p>
+                </div>
+                <div class="mt-6 pt-4 border-t border-slate-100 flex justify-between items-center">
+                    <div>
+                        <span class="text-xs text-slate-400 block" data-en="Monthly Rent" data-bn="মাসিক ভাড়া">Monthly Rent</span>
+                        <span class="font-extrabold text-lg text-slate-800">৳27,000 <span class="text-xs font-normal text-slate-500" data-en="/ month" data-bn="/ মাস">/ month</span></span>
+                    </div>
+                    <a href="#contact" class="bg-slate-900 text-white px-4 py-2 rounded-xl text-xs font-semibold hover:bg-slate-800 transition" data-en="Inquire" data-bn="যোগাযোগ করুন">Inquire</a>
+                </div>
+            </div>
+
+            <!-- Flat 302 -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col justify-between">
+                <div>
+                    <div class="bg-slate-100 h-48 rounded-xl mb-4 flex items-center justify-center text-slate-400 font-medium" data-en="[ Flat 302 Photo: 1100 sq ft ]" data-bn="[ ফ্ল্যাট ৩০২ ছবি: ১১০০ বর্গফিট ]">[ Flat 302 Photo: 1100 sq ft ]</div>
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="bg-emerald-50 text-emerald-700 text-xs font-bold px-2.5 py-1 rounded" data-en="3rd Floor - Flat 302" data-bn="৩য় তলা - ফ্ল্যাট ৩০২">3rd Floor - Flat 302</span>
+                        <span id="badge-302" class="bg-emerald-100 text-emerald-800 text-xs font-bold px-2.5 py-1 rounded-full" data-en="Free For Rent" data-bn="ভাড়ার জন্য খালি">Free For Rent</span>
+                    </div>
+                    <h4 class="font-bold text-xl mt-1" data-en="Deluxe 1100 Sq Ft Apartment" data-bn="ডিলাক্স ১১০০ বর্গফিটের অ্যাপার্টমেন্ট">Deluxe 1100 Sq Ft Apartment</h4>
+                    <p class="text-slate-500 text-sm mt-1" data-en="Bright interior design with independent electricity and clean tubewell water." data-bn="উজ্জ্বল ইন্টেরিয়র ডিজাইন এবং নিজস্ব বিদ্যুৎ ও বিশুদ্ধ টিউবওয়েল পানির সুবিধা।">Bright interior design with independent electricity and clean tubewell water.</p>
+                </div>
+                <div class="mt-6 pt-4 border-t border-slate-100 flex justify-between items-center">
+                    <div>
+                        <span class="text-xs text-slate-400 block" data-en="Monthly Rent" data-bn="মাসিক ভাড়া">Monthly Rent</span>
+                        <span class="font-extrabold text-lg text-slate-800">৳27,000 <span class="text-xs font-normal text-slate-500" data-en="/ month" data-bn="/ মাস">/ month</span></span>
+                    </div>
+                    <a href="#contact" class="bg-slate-900 text-white px-4 py-2 rounded-xl text-xs font-semibold hover:bg-slate-800 transition" data-en="Inquire" data-bn="যোগাযোগ করুন">Inquire</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Additional Dynamic Rentals Section (Loaded from Supabase) -->
+    <section class="max-w-6xl mx-auto px-6 py-6">
+        <h3 class="text-xl font-bold mb-4" data-en="Other Rental Items & Equipment" data-bn="অন্যান্য ভাড়ার জিনিসপত্র ও যন্ত্রপাতি">Other Rental Items & Equipment</h3>
+        <div id="rental-list" class="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
+            <!-- Dynamic items loaded from database appear here -->
+        </div>
+    </section>
+
+    <!-- Direct Contact Section -->
+    <section id="contact" class="max-w-6xl mx-auto px-6 py-12 border-t border-slate-200">
+        <h3 class="text-2xl font-bold mb-2" data-en="Get In Touch" data-bn="যোগাযোগ করুন">Get In Touch</h3>
+        <p class="text-slate-500 text-sm mb-8" data-en="Reach out instantly via WhatsApp, phone, or email for flat viewings and rental bookings." data-bn="ফ্ল্যাট পরিদর্শন এবং বুকিংয়ের জন্য হোয়াটসঅ্যাপ, ফোন বা ইমেইলের মাধ্যমে তাৎক্ষণিকভাবে যোগাযোগ করুন।">Reach out instantly via WhatsApp, phone, or email for flat viewings and rental bookings.</p>
+        
+        <div class="grid sm:grid-cols-3 gap-6">
+            <!-- WhatsApp -->
+            <a href="https://wa.me/YOUR_PHONE_NUMBER" target="_blank" class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:border-emerald-500 transition group">
+                <div class="text-3xl mb-3">💬</div>
+                <h4 class="font-bold text-lg group-hover:text-emerald-600 transition" data-en="WhatsApp Chat" data-bn="হোয়াটসঅ্যাপ চ্যাট">WhatsApp Chat</h4>
+                <p class="text-slate-500 text-sm mt-1" data-en="Message us directly for quick flat inquiries." data-bn="দ্রুত ফ্ল্যাট সংক্রান্ত তথ্যের জন্য সরাসরি মেসেজ করুন।">Message us directly for quick flat inquiries.</p>
+                <span class="inline-block mt-4 text-emerald-600 font-semibold text-sm" data-en="Open WhatsApp &rarr;" data-bn="হোয়াটসঅ্যাপ খুলুন &rarr;">Open WhatsApp &rarr;</span>
+            </a>
+
+            <!-- Phone Call -->
+            <a href="tel:+YOUR_PHONE_NUMBER" class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:border-emerald-500 transition group">
+                <div class="text-3xl mb-3">📞</div>
+                <h4 class="font-bold text-lg group-hover:text-emerald-600 transition" data-en="Direct Call" data-bn="সরাসরি কল">Direct Call</h4>
+                <p class="text-slate-500 text-sm mt-1">+[Your Phone Number Here]</p>
+                <span class="inline-block mt-4 text-emerald-600 font-semibold text-sm" data-en="Call Now &rarr;" data-bn="এখন কল করুন &rarr;">Call Now &rarr;</span>
+            </a>
+
+            <!-- Email -->
+            <a href="mailto:your-email@example.com" class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:border-emerald-500 transition group">
+                <div class="text-3xl mb-3">✉️</div>
+                <h4 class="font-bold text-lg group-hover:text-emerald-600 transition" data-en="Email Us" data-bn="ইমেইল করুন">Email Us</h4>
+                <p class="text-slate-500 text-sm mt-1">your-email@example.com</p>
+                <span class="inline-block mt-4 text-emerald-600 font-semibold text-sm" data-en="Send Email &rarr;" data-bn="ইমেইল পাঠান &rarr;">Send Email &rarr;</span>
+            </a>
+        </div>
+    </section>
+
+    <!-- Scripts for Language Toggle & Supabase -->
+    <script>
+        let currentLang = 'en';
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'en' ? 'bn' : 'en';
+            document.querySelectorAll('[data-en]').forEach(el => {
+                const text = el.getAttribute(`data-${currentLang}`);
+                if (text) {
+                    el.innerText = text;
+                }
+            });
+        }
+
+        // Supabase Dynamic Loader
+        const SUPABASE_URL = 'YOUR_SUPABASE_URL';
+        const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        async function fetchRentals() {
+            const container = document.getElementById('rental-list');
+            const { data, error } = await supabaseClient.from('rentals').select('*');
+            
+            if (error || !data || data.length === 0) {
+                return; 
+            }
+
+            data.forEach(item => {
+                container.innerHTML += `
+                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
+                        <div class="bg-slate-100 h-36 rounded-xl mb-4 flex items-center justify-center text-slate-400">Rental Asset</div>
+                        <h4 class="font-bold text-lg">${item.title}</h4>
+                        <p class="text-slate-500 text-sm mt-1">${item.description}</p>
+                        <a href="#contact" class="inline-block mt-4 text-emerald-600 font-semibold text-sm hover:underline">Inquire Now &rarr;</a>
+                    </div>
+                `;
+            });
+        }
+        fetchRentals();
+    </script>
+</body>
+</html>
