@@ -104,7 +104,6 @@
             }
         });
 
-        // Load existing flat details into form when selector changes
         async function loadSelectedFlatData(flatNumber) {
             const { data, error } = await supabaseClient
                 .from('rentals')
@@ -137,10 +136,11 @@
             const status = document.getElementById('flat-status').value;
             const description = document.getElementById('item-desc').value;
 
-            // Use upsert with onConflict on flat_number so it updates the existing row instead of creating duplicates
+            // Changed from upsert to direct update using .eq() to match your existing table structure safely
             const { error } = await supabaseClient
                 .from('rentals')
-                .upsert([{ flat_number, title, price, status, description }], { onConflict: 'flat_number' });
+                .update({ title, price, status, description })
+                .eq('flat_number', flat_number);
             
             if (error) {
                 alert('Error updating flat: ' + error.message);
