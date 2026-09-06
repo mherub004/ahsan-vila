@@ -1,3 +1,4 @@
+<!-- admin.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,7 +13,7 @@
     <!-- Login Box -->
     <div id="login-box" class="bg-white p-8 rounded-2xl shadow-md w-full max-w-md">
         <h2 class="text-2xl font-bold mb-2 text-center">Ahsanvila Admin Login</h2>
-        <p class="text-xs text-slate-400 text-center mb-6">Manage your 4 rental flats</p>
+        <p class="text-xs text-slate-400 text-center mb-6">Manage flats 101, 102, 301, and 302</p>
         <form id="login-form" class="space-y-4">
             <div>
                 <label class="block text-sm font-medium text-slate-600 mb-1">Admin Email</label>
@@ -34,7 +35,7 @@
         <div class="flex justify-between items-center mb-6">
             <div>
                 <h2 class="text-xl font-bold">Ahsanvila Flat Manager</h2>
-                <p class="text-xs text-slate-500">Update flat status, pricing, and details</p>
+                <p class="text-xs text-slate-500">Update pricing, description, and status for flats 101, 102, 301, 302</p>
             </div>
             <button id="logout-btn" class="text-rose-600 text-sm font-medium hover:underline">Log Out</button>
         </div>
@@ -43,10 +44,10 @@
             <div>
                 <label class="block text-sm font-medium text-slate-600 mb-1">Select Flat</label>
                 <select id="flat-number" required class="w-full px-4 py-2 border rounded-xl outline-none focus:ring-2 focus:ring-emerald-500 bg-white">
-                    <option value="Flat 201">2nd Floor - Flat 201</option>
-                    <option value="Flat 202">2nd Floor - Flat 202</option>
-                    <option value="Flat 301">3rd Floor - Flat 301</option>
-                    <option value="Flat 302">3rd Floor - Flat 302</option>
+                    <option value="101">1st Floor - Flat 101</option>
+                    <option value="102">1st Floor - Flat 102</option>
+                    <option value="301">3rd Floor - Flat 301</option>
+                    <option value="302">3rd Floor - Flat 302</option>
                 </select>
             </div>
 
@@ -78,7 +79,6 @@
     </div>
 
     <script>
-        // REPLACE WITH YOUR ACTUAL SUPABASE CREDENTIALS
         const SUPABASE_URL = 'https://qnojuhdoarwosqxjfpdv.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFub2p1aGRvYXJ3b3NxeGpmcGR2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg2MDk1MTgsImV4cCI6MjEwNDE4NTUxOH0.ruKw1iNnwuygLWrHDs2RZtC6riaJ0t0MCzEz4wcKtCo';
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -88,6 +88,7 @@
         const loginForm = document.getElementById('login-form');
         const uploadForm = document.getElementById('upload-form');
         const logoutBtn = document.getElementById('logout-btn');
+        const flatSelect = document.getElementById('flat-number');
 
         loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -99,25 +100,52 @@
                 alert('Login failed: ' + error.message);
             } else {
                 toggleView(true);
+                loadSelectedFlatData(flatSelect.value);
             }
+        });
+
+        // Load existing flat details into form when selector changes
+        async function loadSelectedFlatData(flatNumber) {
+            const { data, error } = await supabaseClient
+                .from('rentals')
+                .select('*')
+                .eq('flat_number', flatNumber)
+                .single();
+
+            if (data) {
+                document.getElementById('item-title').value = data.title || '';
+                document.getElementById('item-price').value = data.price || '';
+                document.getElementById('flat-status').value = data.status || 'Free For Rent';
+                document.getElementById('item-desc').value = data.description || '';
+            } else {
+                document.getElementById('item-title').value = '';
+                document.getElementById('item-price').value = '';
+                document.getElementById('flat-status').value = 'Free For Rent';
+                document.getElementById('item-desc').value = '';
+            }
+        }
+
+        flatSelect.addEventListener('change', (e) => {
+            loadSelectedFlatData(e.target.value);
         });
 
         uploadForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const flat_number = document.getElementById('flat-number').value;
+            const flat_number = flatSelect.value;
             const title = document.getElementById('item-title').value;
             const price = document.getElementById('item-price').value;
             const status = document.getElementById('flat-status').value;
             const description = document.getElementById('item-desc').value;
 
-            // Upsert / Insert flat details into database
-            const { error } = await supabaseClient.from('rentals').insert([{ flat_number, title, price, status, description }]);
+            // Use upsert with onConflict on flat_number so it updates the existing row instead of creating duplicates
+            const { error } = await supabaseClient
+                .from('rentals')
+                .upsert([{ flat_number, title, price, status, description }], { onConflict: 'flat_number' });
             
             if (error) {
                 alert('Error updating flat: ' + error.message);
             } else {
-                alert('Flat details updated successfully!');
-                uploadForm.reset();
+                alert(`Flat ${flat_number} details updated successfully!`);
             }
         });
 
