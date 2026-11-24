@@ -31,7 +31,7 @@ function renderFlat(flat) {
     <span class="flat-no">/${number}</span>
     <div class="flat-primary"><span class="flat-status ${free ? '' : 'occupied'}" data-en="${free ? 'AVAILABLE' : 'OCCUPIED'}" data-bn="${free ? 'ভাড়া দেওয়া হবে' : 'ভাড়া দেওয়া হয়েছে'}">${free ? 'AVAILABLE' : 'OCCUPIED'}</span><h3>${escapeHtml(flat.title || '1,100 Sq Ft Apartment')}</h3><p class="flat-description">${escapeHtml(flat.description || 'A comfortable space for everyday living.')}</p></div>
     <div class="flat-price"><strong>${escapeHtml(flat.price || 'On request')}</strong><small data-en="PER MONTH" data-bn="প্রতি মাসে">PER MONTH</small></div>
-    <div class="flat-image ${src ? '' : 'no-image'}">${image}<span class="view-mark" aria-hidden="true">+</span></div>
+    <div class="flat-image ${src ? '' : 'no-image'}">${image}</div>
   </article>`;
 }
 function renderIndex(flat) {
