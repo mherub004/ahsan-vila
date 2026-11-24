@@ -83,21 +83,24 @@ function renderContactSettings() {
   const en = language === 'en';
   const emailLink = document.getElementById('contact-email-link');
   const whatsappLink = document.getElementById('contact-whatsapp-link');
-  const submit = document.getElementById('enquiry-submit');
+  const emailButton = document.getElementById('enquiry-email');
+  const whatsappButton = document.getElementById('enquiry-whatsapp');
   const note = document.getElementById('enquiry-note');
   emailValue.textContent = contactSettings.email || (en ? 'Email address coming soon' : 'ইমেইল ঠিকানা শীঘ্রই আসছে');
   whatsappValue.textContent = contactSettings.whatsapp || (en ? 'WhatsApp number coming soon' : 'হোয়াটসঅ্যাপ নম্বর শীঘ্রই আসছে');
   emailLink.hidden = !contactSettings.email;
   whatsappLink.hidden = !contactSettings.whatsapp;
-  if (contactSettings.email) emailLink.href = 'mailto:' + encodeURIComponent(contactSettings.email);
+  if (contactSettings.email) emailLink.href = 'mailto:' + contactSettings.email;
   else emailLink.removeAttribute('href');
   if (contactSettings.whatsapp) whatsappLink.href = 'https://wa.me/' + contactSettings.whatsapp.slice(1);
   else whatsappLink.removeAttribute('href');
-  submit.disabled = !contactSettings.email;
-  submit.textContent = en ? 'PREPARE EMAIL DRAFT +' : 'ইমেইল খসড়া তৈরি করুন +';
-  note.textContent = contactSettings.email
-    ? (en ? 'This opens your email app with a draft. Review it and press Send there.' : 'আপনার ইমেইল অ্যাপে একটি খসড়া খুলবে। দেখে তারপর পাঠান।')
-    : (en ? 'Enquiries will open when the contact email is added.' : 'যোগাযোগের ইমেইল যোগ হলে অনুসন্ধান পাঠানো যাবে।');
+  emailButton.disabled = !contactSettings.email;
+  whatsappButton.disabled = !contactSettings.whatsapp;
+  emailButton.textContent = en ? 'SEND VIA EMAIL ↗' : 'ইমেইলে পাঠান ↗';
+  whatsappButton.textContent = en ? 'SEND VIA WHATSAPP ↗' : 'হোয়াটসঅ্যাপে পাঠান ↗';
+  note.textContent = en
+    ? 'Your chosen app opens with your details filled in. Review the message and press Send there.'
+    : 'আপনার তথ্যসহ নির্বাচিত অ্যাপ খুলবে। বার্তাটি দেখে সেখানে Send চাপুন।';
 }
 async function fetchContactSettings() {
   if (!client) return;
@@ -112,17 +115,32 @@ async function fetchContactSettings() {
   renderContactSettings();
 }
 const enquiryForm = document.getElementById('enquiry-form');
-if (enquiryForm) enquiryForm.addEventListener('submit', event => {
-  event.preventDefault();
-  if (!contactSettings.email || !enquiryForm.reportValidity()) return;
+function enquiryDetails() {
+  if (!enquiryForm.reportValidity()) return null;
   const values = new FormData(enquiryForm);
   const name = String(values.get('name') || '').trim();
   const reply = String(values.get('reply') || '').trim();
   const flat = String(values.get('flat') || '').trim();
   const message = String(values.get('message') || '').trim();
-  const subject = 'Ahsanvila flat enquiry' + (flat ? ' — Flat ' + flat : '');
-  const body = 'Name: ' + name + '\\nReply email: ' + reply + '\\nFlat: ' + (flat || 'Not specified') + '\\n\\n' + message;
-  window.location.href = 'mailto:' + encodeURIComponent(contactSettings.email) +
-    '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
-});
+  if (!name || !message) return null;
+  return { name, reply, flat, message };
+}
+if (enquiryForm) {
+  enquiryForm.addEventListener('submit', event => event.preventDefault());
+  document.getElementById('enquiry-email').addEventListener('click', () => {
+    if (!contactSettings.email) return;
+    const details = enquiryDetails();
+    if (!details) return;
+    const subject = 'Ahsanvila flat enquiry' + (details.flat ? ' — Flat ' + details.flat : '');
+    const body = ['Name: ' + details.name, details.reply ? 'Reply email: ' + details.reply : '', 'Flat: ' + (details.flat || 'Not specified'), '', details.message].filter((line, index) => line || index === 3).join('\\n');
+    window.location.href = 'mailto:' + contactSettings.email + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+  });
+  document.getElementById('enquiry-whatsapp').addEventListener('click', () => {
+    if (!contactSettings.whatsapp) return;
+    const details = enquiryDetails();
+    if (!details) return;
+    const body = ['Ahsanvila flat enquiry', 'Name: ' + details.name, details.reply ? 'Reply email: ' + details.reply : '', 'Flat: ' + (details.flat || 'Not specified'), '', details.message].filter(Boolean).join('\\n');
+    window.open('https://wa.me/' + contactSettings.whatsapp.slice(1) + '?text=' + encodeURIComponent(body), '_blank', 'noopener,noreferrer');
+  });
+}
 fetchContactSettings();
