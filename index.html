@@ -162,6 +162,7 @@
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFub2p1aGRvYXJ3b3NxeGpmcGR2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg2MDk1MTgsImV4cCI6MjEwNDE4NTUxOH0.ruKw1iNnwuygLWrHDs2RZtC6riaJ0t0MCzEz4wcKtCo';
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+        const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
         async function fetchFlats() {
             const container = document.getElementById('flats-container');
             const { data, error } = await supabaseClient.from('rentals').select('*').order('flat_number');
@@ -176,23 +177,25 @@
 
             container.innerHTML = data.map(flat => {
                 const isFree = flat.status === 'Free For Rent';
+                const path = typeof flat.image_path === 'string' && /^flat-(101|102|301|302)\/[a-z0-9-]+\.(jpg|png|webp)$/.test(flat.image_path) ? flat.image_path : null;
+                const photo = path ? supabaseClient.storage.from('flat-images').getPublicUrl(path).data.publicUrl : null;
                 return `
                     <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-200/80 flex flex-col justify-between hover:shadow-md transition">
                         <div>
                             <div class="bg-slate-100 h-52 rounded-2xl mb-6 flex items-center justify-center text-slate-400 font-medium border border-slate-200">
-                                [ Flat ${flat.flat_number} Photo: 1100 sq ft ]
+                                ${photo ? `<img src="${escapeHtml(photo)}" alt="Flat ${escapeHtml(flat.flat_number)}" loading="lazy" class="w-full h-full object-cover rounded-2xl">` : `Flat ${escapeHtml(flat.flat_number)} photo coming soon`}
                             </div>
                             <div class="flex justify-between items-center mb-3">
-                                <span class="bg-emerald-50 text-emerald-700 text-xs font-bold px-3 py-1.5 rounded-lg border border-emerald-200/60">Flat Unit #${flat.flat_number}</span>
-                                <span class="text-xs font-bold px-3 py-1.5 rounded-full ${isFree ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'}">${flat.status || 'Free For Rent'}</span>
+                                <span class="bg-emerald-50 text-emerald-700 text-xs font-bold px-3 py-1.5 rounded-lg border border-emerald-200/60">Flat Unit #${escapeHtml(flat.flat_number)}</span>
+                                <span class="text-xs font-bold px-3 py-1.5 rounded-full ${isFree ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'}">${escapeHtml(flat.status || 'Free For Rent')}</span>
                             </div>
-                            <h4 class="font-bold text-2xl text-slate-900 mt-1">${flat.title || '1100 Sq Ft Apartment'}</h4>
-                            <p class="text-slate-500 text-sm mt-2 leading-relaxed">${flat.description || 'Spacious family layout featuring optimal airflow and constant utility access from our deep tubewell.'}</p>
+                            <h4 class="font-bold text-2xl text-slate-900 mt-1">${escapeHtml(flat.title || '1100 Sq Ft Apartment')}</h4>
+                            <p class="text-slate-500 text-sm mt-2 leading-relaxed">${escapeHtml(flat.description || 'Spacious family layout featuring optimal airflow and constant utility access from our deep tubewell.')}</p>
                         </div>
                         <div class="mt-8 pt-6 border-t border-slate-100 flex justify-between items-center">
                             <div>
                                 <span class="text-xs text-slate-400 block font-medium" data-en="Monthly Rent" data-bn="মাসিক ভাড়া">Monthly Rent</span>
-                                <span class="font-black text-xl text-slate-900">${flat.price || '৳25,000'} <span class="text-xs font-normal text-slate-500" data-en="/ month" data-bn="/ মাস">/ month</span></span>
+                                <span class="font-black text-xl text-slate-900">${escapeHtml(flat.price || '৳25,000')} <span class="text-xs font-normal text-slate-500" data-en="/ month" data-bn="/ মাস">/ month</span></span>
                             </div>
                             <a href="#contact" class="bg-slate-900 text-white px-5 py-2.5 rounded-xl text-xs font-semibold hover:bg-slate-800 transition shadow-sm" data-en="Inquire Now" data-bn="যোগাযোগ করুন">Inquire Now</a>
                         </div>
