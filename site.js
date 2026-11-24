@@ -3,6 +3,7 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 const client = window.supabase?.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let language = 'en';
+let contactSettings = { email: null, whatsapp: null };
 function applyLanguage() {
   document.documentElement.lang = language;
   document.querySelectorAll('[data-en][data-bn]').forEach(el => {
@@ -13,6 +14,7 @@ function applyLanguage() {
   const button = document.getElementById('lang-toggle');
   button.textContent = language === 'en' ? 'বাংলা' : 'English';
   button.setAttribute('aria-label', language === 'en' ? 'Switch language to Bangla' : 'Switch language to English');
+  renderContactSettings();
 }
 document.getElementById('lang-toggle').addEventListener('click', () => {
   language = language === 'en' ? 'bn' : 'en';
@@ -72,3 +74,55 @@ async function fetchFlats() {
   applyLanguage();
 }
 fetchFlats();
+
+function renderContactSettings() {
+  const emailValue = document.getElementById('contact-email-value');
+  const whatsappValue = document.getElementById('contact-whatsapp-value');
+  const form = document.getElementById('enquiry-form');
+  if (!emailValue || !whatsappValue || !form) return;
+  const en = language === 'en';
+  const emailLink = document.getElementById('contact-email-link');
+  const whatsappLink = document.getElementById('contact-whatsapp-link');
+  const submit = document.getElementById('enquiry-submit');
+  const note = document.getElementById('enquiry-note');
+  emailValue.textContent = contactSettings.email || (en ? 'Email address coming soon' : 'ইমেইল ঠিকানা শীঘ্রই আসছে');
+  whatsappValue.textContent = contactSettings.whatsapp || (en ? 'WhatsApp number coming soon' : 'হোয়াটসঅ্যাপ নম্বর শীঘ্রই আসছে');
+  emailLink.hidden = !contactSettings.email;
+  whatsappLink.hidden = !contactSettings.whatsapp;
+  if (contactSettings.email) emailLink.href = 'mailto:' + encodeURIComponent(contactSettings.email);
+  else emailLink.removeAttribute('href');
+  if (contactSettings.whatsapp) whatsappLink.href = 'https://wa.me/' + contactSettings.whatsapp.slice(1);
+  else whatsappLink.removeAttribute('href');
+  submit.disabled = !contactSettings.email;
+  submit.textContent = en ? 'PREPARE EMAIL DRAFT +' : 'ইমেইল খসড়া তৈরি করুন +';
+  note.textContent = contactSettings.email
+    ? (en ? 'This opens your email app with a draft. Review it and press Send there.' : 'আপনার ইমেইল অ্যাপে একটি খসড়া খুলবে। দেখে তারপর পাঠান।')
+    : (en ? 'Enquiries will open when the contact email is added.' : 'যোগাযোগের ইমেইল যোগ হলে অনুসন্ধান পাঠানো যাবে।');
+}
+async function fetchContactSettings() {
+  if (!client) return;
+  const { data, error } = await client.from('site_contact').select('contact_email,whatsapp_number').eq('id', 1).maybeSingle();
+  if (error || !data) return;
+  const email = data.contact_email?.trim();
+  const whatsapp = data.whatsapp_number?.trim();
+  contactSettings = {
+    email: email && /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$/.test(email) ? email : null,
+    whatsapp: whatsapp && /^\\+[1-9][0-9]{7,14}$/.test(whatsapp) ? whatsapp : null
+  };
+  renderContactSettings();
+}
+const enquiryForm = document.getElementById('enquiry-form');
+if (enquiryForm) enquiryForm.addEventListener('submit', event => {
+  event.preventDefault();
+  if (!contactSettings.email || !enquiryForm.reportValidity()) return;
+  const values = new FormData(enquiryForm);
+  const name = String(values.get('name') || '').trim();
+  const reply = String(values.get('reply') || '').trim();
+  const flat = String(values.get('flat') || '').trim();
+  const message = String(values.get('message') || '').trim();
+  const subject = 'Ahsanvila flat enquiry' + (flat ? ' — Flat ' + flat : '');
+  const body = 'Name: ' + name + '\\nReply email: ' + reply + '\\nFlat: ' + (flat || 'Not specified') + '\\n\\n' + message;
+  window.location.href = 'mailto:' + encodeURIComponent(contactSettings.email) +
+    '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+});
+fetchContactSettings();
