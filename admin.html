@@ -74,6 +74,17 @@
                 <textarea id="item-desc" rows="3" placeholder="Details about rooms, facilities, deep tubewell water access, etc." required class="w-full px-4 py-2 border rounded-xl outline-none focus:ring-2 focus:ring-emerald-500"></textarea>
             </div>
 
+            <fieldset class="border-t border-slate-200 pt-4">
+                <legend class="text-sm font-semibold text-slate-700">Optional flat details</legend>
+                <p class="text-xs text-slate-500 mb-3">Leave unknown details blank. They will not appear on the public page.</p>
+                <div class="grid grid-cols-2 gap-3">
+                    <div><label for="item-area" class="block text-sm mb-1">Area (sq ft)</label><input id="item-area" type="number" min="1" max="100000" step="1" placeholder="e.g., 1100" class="w-full px-3 py-2 border rounded-xl"></div>
+                    <div><label for="item-bedrooms" class="block text-sm mb-1">Bedrooms</label><input id="item-bedrooms" type="number" min="0" max="20" step="1" class="w-full px-3 py-2 border rounded-xl"></div>
+                    <div><label for="item-bathrooms" class="block text-sm mb-1">Bathrooms</label><input id="item-bathrooms" type="number" min="0" max="20" step="1" class="w-full px-3 py-2 border rounded-xl"></div>
+                    <div><label for="item-balconies" class="block text-sm mb-1">Balconies</label><input id="item-balconies" type="number" min="0" max="20" step="1" class="w-full px-3 py-2 border rounded-xl"></div>
+                </div>
+            </fieldset>
+
             <div><label class="block text-sm font-medium text-slate-600 mb-1" for="flat-image">Flat photo (JPG, PNG or WebP, up to 5 MB)</label><input id="flat-image" type="file" accept="image/jpeg,image/png,image/webp" class="w-full text-sm"><img id="image-preview" alt="Current flat photo" class="hidden mt-3 h-40 w-full object-cover rounded-xl"><p id="image-hint" class="text-xs text-slate-500 mt-2">Choose a photo to replace the current one when you save.</p></div>
             <p id="save-message" role="status" class="text-sm"></p>
             <button type="submit" class="w-full bg-slate-900 text-white py-2.5 rounded-xl font-medium hover:bg-slate-800 transition">Save Flat Update</button>
@@ -133,6 +144,9 @@
                 document.getElementById('item-price').value = data.price || '';
                 document.getElementById('flat-status').value = data.status || 'Free For Rent';
                 document.getElementById('item-desc').value = data.description || '';
+                for (const [column, id] of Object.entries({ area_sqft: 'item-area', bedrooms: 'item-bedrooms', bathrooms: 'item-bathrooms', balconies: 'item-balconies' })) {
+                    document.getElementById(id).value = data[column] ?? '';
+                }
                 setPhoto(data.image_path);
                 imageInput.value = '';
             } else {
@@ -140,6 +154,7 @@
                 document.getElementById('item-price').value = '';
                 document.getElementById('flat-status').value = 'Free For Rent';
                 document.getElementById('item-desc').value = '';
+                for (const id of ['item-area', 'item-bedrooms', 'item-bathrooms', 'item-balconies']) document.getElementById(id).value = '';
                 setPhoto(null);
                 imageInput.value = '';
                 message.textContent = error ? 'Could not load this flat: ' + error.message : 'This flat has no record yet.';
@@ -172,6 +187,10 @@
                 if (uploadError) { message.textContent = 'Photo upload failed: ' + uploadError.message; return; }
             }
             const changes = { title, price, status, description };
+            for (const [column, id] of Object.entries({ area_sqft: 'item-area', bedrooms: 'item-bedrooms', bathrooms: 'item-bathrooms', balconies: 'item-balconies' })) {
+                const value = document.getElementById(id).value;
+                changes[column] = value === '' ? null : Number(value);
+            }
             if (image_path) changes.image_path = image_path;
             const { data: updated, error } = await supabaseClient.from('rentals')
                 .update(changes).eq('flat_number', flat_number).select('flat_number,image_path');
