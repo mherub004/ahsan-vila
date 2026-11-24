@@ -83,7 +83,7 @@
     <script>
         const SUPABASE_URL = 'https://qnojuhdoarwosqxjfpdv.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFub2p1aGRvYXJ3b3NxeGpmcGR2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg2MDk1MTgsImV4cCI6MjEwNDE4NTUxOH0.ruKw1iNnwuygLWrHDs2RZtC6riaJ0t0MCzEz4wcKtCo';
-        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, { auth: { persistSession: false, detectSessionInUrl: false } });
 
         const loginBox = document.getElementById('login-box');
         const dashboard = document.getElementById('dashboard');
@@ -104,10 +104,6 @@
             const file = imageInput.files[0];
             if (file) { preview.src = URL.createObjectURL(file); preview.classList.remove('hidden'); }
         });
-        supabaseClient.auth.getUser().then(({ data }) => {
-            if (data.user && data.user.id === ADMIN_ID) { toggleView(true); loadSelectedFlatData(flatSelect.value); }
-        });
-
         loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const email = document.getElementById('email').value;
