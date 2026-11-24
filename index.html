@@ -3,59 +3,43 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#f5f2eb">
-  <meta name="description" content="Explore four residential flats at Ahsanvila. View current availability, rental details and property information.">
-  <title>Ahsanvila — A place to feel at home</title>
-  <link rel="stylesheet" href="style.css?v=2">
+  <meta name="theme-color" content="#121d1d">
+  <meta name="description" content="Explore four flats at Ahsanvila. View availability, rent and property details.">
+  <title>Ahsanvila — Four flats. One address.</title>
+  <link rel="stylesheet" href="style.css?v=3">
   <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script defer src="site.js"></script>
+  <script defer src="site.js?v=3"></script>
 </head>
 <body>
-  <a class="skip-link" href="#main">Skip to content</a>
+  <a class="skip" href="#flats">Skip to flats</a>
   <header class="site-header">
-    <div class="shell header-inner">
-      <a class="brand" href="/" aria-label="Ahsanvila home"><span class="brand-mark" aria-hidden="true">A<span>.</span></span><span class="brand-name">Ahsanvila<small>RESIDENCES</small></span></a>
-      <nav class="main-nav" aria-label="Main navigation">
-        <a href="#residences" data-en="The residences" data-bn="ফ্ল্যাটসমূহ">The residences</a>
-        <a href="#about" data-en="The property" data-bn="বাড়ি সম্পর্কে">The property</a>
-        <a href="#location" data-en="Location" data-bn="অবস্থান">Location</a>
-      </nav>
-      <div class="header-actions"><button type="button" id="lang-toggle" class="language-button" aria-label="Switch language to Bangla">বাংলা <span aria-hidden="true">↗</span></button><a class="admin-link" href="admin.html" data-en="Admin" data-bn="অ্যাডমিন">Admin</a></div>
-    </div>
+    <a class="wordmark" href="/" aria-label="Ahsanvila home">AHSANVILA<span class="wordmark-dot">●</span></a>
+    <nav aria-label="Site navigation"><a href="#flats" data-en="FLATS" data-bn="ফ্ল্যাট">FLATS</a><a href="#building" data-en="THE BUILDING" data-bn="ভবন">THE BUILDING</a><a href="#location" data-en="LOCATION" data-bn="অবস্থান">LOCATION</a></nav>
+    <div class="header-right"><button id="lang-toggle" type="button" aria-label="Switch language to Bangla">বাংলা</button><a href="admin.html" class="admin-link" data-en="ADMIN" data-bn="অ্যাডমিন">ADMIN</a></div>
   </header>
-
-  <main id="main">
-    <section class="hero shell" aria-labelledby="hero-title">
-      <div class="hero-copy">
-        <p class="eyebrow"><span class="eyebrow-line"></span><span data-en="AHSANVILA · RESIDENTIAL LIVING" data-bn="আহসানভিলা · আবাসিক জীবন">AHSANVILA · RESIDENTIAL LIVING</span></p>
-        <h1 id="hero-title" data-en="Room to live <em>well.</em>" data-bn="সুন্দরভাবে <em>থাকার ঠিকানা।</em>">Room to live <em>well.</em></h1>
-        <p class="hero-intro" data-en="Four thoughtfully sized apartments in a peaceful residential building. Explore the flats, find what fits, and make yourself at home." data-bn="শান্ত আবাসিক ভবনে চারটি প্রশস্ত ফ্ল্যাট। আপনার পছন্দের ফ্ল্যাটটি খুঁজে নিন।">Four thoughtfully sized apartments in a peaceful residential building. Explore the flats, find what fits, and make yourself at home.</p>
-        <div class="hero-actions"><a class="button button-dark" href="#residences"><span data-en="Explore the flats" data-bn="ফ্ল্যাট দেখুন">Explore the flats</span><span aria-hidden="true">↗</span></a><a class="text-link" href="#about" data-en="Discover the property ↓" data-bn="বাড়ি সম্পর্কে জানুন ↓">Discover the property ↓</a></div>
-        <div class="hero-footnote"><span class="hero-footnote-number">04</span><span data-en="apartments across the residence" data-bn="আবাসিক ভবনে চারটি ফ্ল্যাট">apartments across the residence</span></div>
+  <main>
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-inner">
+        <div class="hero-main">
+          <div class="hero-meta"><span>01—04 / AHSANVILA</span><span data-en="RESIDENTIAL PROPERTY" data-bn="আবাসিক ভবন">RESIDENTIAL PROPERTY</span></div>
+          <h1 id="hero-title" data-en="FOUR FLATS.<br>ONE <i>ADDRESS.</i>" data-bn="চারটি ফ্ল্যাট।<br>একটি <i>ঠিকানা।</i>">FOUR FLATS.<br>ONE <i>ADDRESS.</i></h1>
+          <div class="hero-bottom"><p data-en="A straightforward place to find your next home. Four apartments, clear details, and current availability in one view." data-bn="আপনার পরবর্তী বাসা খুঁজে নেওয়ার সহজ জায়গা। চারটি ফ্ল্যাটের বিবরণ এবং বর্তমান অবস্থা একসঙ্গে দেখুন।">A straightforward place to find your next home. Four apartments, clear details, and current availability in one view.</p><a class="circle-link" href="#flats" aria-label="Explore flats"><span>+</span></a></div>
+        </div>
+        <aside class="hero-directory" aria-labelledby="directory-title"><div class="directory-head"><span id="directory-title" data-en="THE FLAT INDEX" data-bn="ফ্ল্যাটের তালিকা">THE FLAT INDEX</span><span>AH / 04</span></div><div id="hero-index" class="directory-list" aria-live="polite"><div class="directory-loading">101 / 102 / 301 / 302</div></div><p class="directory-foot" data-en="SELECT A FLAT TO SEE ITS DETAILS" data-bn="বিস্তারিত দেখতে ফ্ল্যাট বেছে নিন">SELECT A FLAT TO SEE ITS DETAILS</p></aside>
       </div>
-      <div class="hero-visual" role="img" aria-label="Architectural illustration of a residential building">
-        <div class="visual-topline"><span>THE RESIDENCE</span><span>01 / 04</span></div>
-        <div class="architecture" aria-hidden="true"><div class="roof"></div><div class="building"><div class="building-floor"><i></i><i></i><i></i></div><div class="building-floor"><i></i><i></i><i></i></div><div class="building-floor"><i></i><i></i><i></i></div><div class="building-floor ground"><i></i><span class="door"></span><i></i></div></div><div class="ground-line"></div></div>
-        <div class="visual-caption"><span data-en="A place to settle in." data-bn="আপনার থাকার ঠিকানা।">A place to settle in.</span><span class="visual-caption-rule"></span><span>AH SAN VI LA</span></div>
-      </div>
+      <div class="ticker" aria-hidden="true"><span>AHSANVILA&nbsp;&nbsp; / &nbsp;&nbsp; 4 FLATS&nbsp;&nbsp; / &nbsp;&nbsp; 1 ADDRESS&nbsp;&nbsp; / &nbsp;&nbsp; AHSANVILA&nbsp;&nbsp; / &nbsp;&nbsp; 4 FLATS&nbsp;&nbsp; / &nbsp;&nbsp; 1 ADDRESS</span></div>
     </section>
-
-    <section class="overview-strip" id="about" aria-label="Property highlights"><div class="shell overview-grid">
-      <div><span class="overview-value">04</span><span class="overview-label" data-en="apartments" data-bn="ফ্ল্যাট">apartments</span></div>
-      <div><span class="overview-value">1,100</span><span class="overview-label" data-en="sq ft per flat" data-bn="বর্গফুট প্রতি ফ্ল্যাট">sq ft per flat</span></div>
-      <div><span class="overview-value">1,000<span class="overview-unit">ft</span></span><span class="overview-label" data-en="deep tubewell" data-bn="গভীর নলকূপ">deep tubewell</span></div>
-      <div class="overview-note" data-en="Practical spaces, reliable utilities, and room for everyday life." data-bn="প্রশস্ত ফ্ল্যাট, নির্ভরযোগ্য সুবিধা এবং স্বাচ্ছন্দ্যের বসবাস।">Practical spaces, reliable utilities, and room for everyday life.</div>
+    <section id="flats" class="flats-section" aria-labelledby="flats-title"><div class="section-wrap">
+      <div class="section-intro"><span class="section-number">01 / THE FLATS</span><div><h2 id="flats-title" data-en="FIND YOUR<br><i>SPACE.</i>" data-bn="আপনার<br><i>ফ্ল্যাট।</i>">FIND YOUR<br><i>SPACE.</i></h2><p data-en="Compare the four flats below. Details and availability come directly from the property manager." data-bn="নিচের চারটি ফ্ল্যাটের তথ্য ও বর্তমান অবস্থা দেখুন। বিবরণ সরাসরি পরিচালকের কাছ থেকে হালনাগাদ করা হয়।">Compare the four flats below. Details and availability come directly from the property manager.</p></div></div>
+      <div class="list-header" aria-hidden="true"><span>NO.</span><span>RESIDENCE / DETAILS</span><span>MONTHLY RENT</span><span>IMAGE</span></div>
+      <div id="flats-container" aria-live="polite"><p class="loading">Loading flats…</p></div>
     </div></section>
-
-    <section class="residences section shell" id="residences" aria-labelledby="flats-title">
-      <div class="section-heading"><div><p class="eyebrow"><span class="eyebrow-line"></span><span data-en="FIND YOUR SPACE" data-bn="আপনার ফ্ল্যাট খুঁজুন">FIND YOUR SPACE</span></p><h2 id="flats-title" data-en="The residences<span class='period'>.</span>" data-bn="ফ্ল্যাটসমূহ<span class='period'>।</span>">The residences<span class="period">.</span></h2></div><p data-en="A closer look at each flat. Availability, details and pricing are updated from the property manager." data-bn="প্রতিটি ফ্ল্যাটের বর্তমান অবস্থা, বিবরণ ও ভাড়া এখানে দেখুন।">A closer look at each flat. Availability, details and pricing are updated from the property manager.</p></div>
-      <div id="flats-container" class="flat-grid" aria-live="polite"><p class="loading">Loading residences…</p></div>
-    </section>
-
-    <section class="details-section" aria-labelledby="details-title"><div class="shell details-layout"><div class="details-title"><p class="eyebrow"><span class="eyebrow-line"></span><span data-en="EVERYDAY COMFORT" data-bn="প্রতিদিনের স্বাচ্ছন্দ্য">EVERYDAY COMFORT</span></p><h2 id="details-title" data-en="The details that <em>matter.</em>" data-bn="প্রয়োজনীয় <em>সুবিধাসমূহ।</em>">The details that <em>matter.</em></h2></div><div class="details-list"><div class="detail"><span class="detail-index">01</span><div><h3 data-en="Space to make your own" data-bn="নিজের মতো থাকার জায়গা">Space to make your own</h3><p data-en="Each apartment offers approximately 1,100 sq ft for comfortable daily living." data-bn="প্রতিটি ফ্ল্যাটে আরামদায়ক বসবাসের জন্য প্রায় ১,১০০ বর্গফুট জায়গা।">Each apartment offers approximately 1,100 sq ft for comfortable daily living.</p></div></div><div class="detail"><span class="detail-index">02</span><div><h3 data-en="Independent water supply" data-bn="নিজস্ব পানির ব্যবস্থা">Independent water supply</h3><p data-en="A dedicated 1,000 ft deep tubewell serves the building." data-bn="ভবনের জন্য রয়েছে নিজস্ব ১,০০০ ফুট গভীর নলকূপ।">A dedicated 1,000 ft deep tubewell serves the building.</p></div></div><div class="detail"><span class="detail-index">03</span><div><h3 data-en="A residential setting" data-bn="আবাসিক পরিবেশ">A residential setting</h3><p data-en="Four flats within a compact property, with room for families and everyday routines." data-bn="চারটি ফ্ল্যাটের ছোট আবাসিক ভবন, পরিবারের দৈনন্দিন জীবনের জন্য উপযুক্ত।">Four flats within a compact property, with room for families and everyday routines.</p></div></div></div></div></section>
-
-    <section class="location-section shell" id="location" aria-labelledby="location-title"><div class="location-panel"><div><p class="eyebrow eyebrow-light"><span class="eyebrow-line"></span><span data-en="COME FIND US" data-bn="আমাদের অবস্থান">COME FIND US</span></p><h2 id="location-title" data-en="Find your way <em>home.</em>" data-bn="আপনার নতুন <em>ঠিকানা।</em>">Find your way <em>home.</em></h2><p data-en="Explore the location and the surrounding area on Google Maps." data-bn="গুগল ম্যাপে অবস্থান এবং আশেপাশের এলাকা দেখুন।">Explore the location and the surrounding area on Google Maps.</p></div><a class="button button-light" href="https://share.google/mqbPSG9BZZpaEQR68" target="_blank" rel="noopener noreferrer"><span data-en="Open in Google Maps" data-bn="গুগল ম্যাপে দেখুন">Open in Google Maps</span><span aria-hidden="true">↗</span></a></div></section>
+    <section id="building" class="building-section" aria-labelledby="building-title"><div class="section-wrap">
+      <span class="section-number">02 / THE BUILDING</span><div class="building-top"><h2 id="building-title" data-en="THE SPACE<br>AROUND <i>HOME.</i>" data-bn="বাড়ির<br><i>সুবিধাসমূহ।</i>">THE SPACE<br>AROUND <i>HOME.</i></h2><p data-en="A compact residential building with four apartments and the practical essentials for everyday life." data-bn="চারটি ফ্ল্যাটের আবাসিক ভবন, যেখানে দৈনন্দিন জীবনের প্রয়োজনীয় সুবিধা রয়েছে।">A compact residential building with four apartments and the practical essentials for everyday life.</p></div>
+      <div class="facts"><div class="fact"><span class="fact-label" data-en="EACH APARTMENT" data-bn="প্রতিটি ফ্ল্যাট">EACH APARTMENT</span><strong>1,100<span> SQ FT</span></strong><p data-en="Space for the way you live." data-bn="স্বাচ্ছন্দ্যে বসবাসের জায়গা।">Space for the way you live.</p></div><div class="fact"><span class="fact-label" data-en="WATER SOURCE" data-bn="পানির উৎস">WATER SOURCE</span><strong>1,000<span> FT</span></strong><p data-en="Independent deep tubewell." data-bn="নিজস্ব গভীর নলকূপ।">Independent deep tubewell.</p></div><div class="fact"><span class="fact-label" data-en="AT THIS ADDRESS" data-bn="এই ভবনে">AT THIS ADDRESS</span><strong>04<span> FLATS</span></strong><p data-en="A small residential setting." data-bn="ছোট আবাসিক পরিবেশ।">A small residential setting.</p></div></div>
+    </div></section>
+    <section id="location" class="location-section" aria-labelledby="location-title"><div class="section-wrap location-wrap"><div><span class="section-number">03 / LOCATION</span><h2 id="location-title" data-en="COME SEE<br><i>THE PLACE.</i>" data-bn="অবস্থান<br><i>দেখুন।</i>">COME SEE<br><i>THE PLACE.</i></h2></div><div class="location-aside"><p data-en="Explore the property location and nearby area on Google Maps." data-bn="গুগল ম্যাপে বাড়ির অবস্থান এবং আশেপাশের এলাকা দেখুন।">Explore the property location and nearby area on Google Maps.</p><a class="map-link" href="https://share.google/mqbPSG9BZZpaEQR68" target="_blank" rel="noopener noreferrer"><span data-en="OPEN GOOGLE MAPS" data-bn="গুগল ম্যাপ খুলুন">OPEN GOOGLE MAPS</span><b>+</b></a></div></div></section>
   </main>
-  <footer class="footer shell"><div><a class="footer-brand" href="/">Ahsanvila<span>.</span></a><p data-en="A place to feel at home." data-bn="আপনার থাকার ঠিকানা।">A place to feel at home.</p></div><div class="footer-right"><a href="#residences" data-en="Residences" data-bn="ফ্ল্যাটসমূহ">Residences</a><a href="#location" data-en="Location" data-bn="অবস্থান">Location</a><span>© 2026 Ahsanvila</span></div></footer>
+  <footer><div class="section-wrap footer-inner"><span class="footer-logo">AHSANVILA<span>●</span></span><span data-en="FOUR FLATS. ONE ADDRESS." data-bn="চারটি ফ্ল্যাট। একটি ঠিকানা।">FOUR FLATS. ONE ADDRESS.</span><span>© 2026 AHSANVILA</span></div></footer>
 </body>
 </html>
