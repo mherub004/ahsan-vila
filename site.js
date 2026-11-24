@@ -26,10 +26,19 @@ function renderFlat(flat) {
   const free = flat.status === 'Free For Rent';
   const path = safeImagePath(flat.image_path);
   const src = path ? client.storage.from('flat-images').getPublicUrl(path).data.publicUrl : null;
+  const specs = [
+    [flat.area_sqft, 'SQ FT', 'বর্গফুট'],
+    [flat.bedrooms, 'BEDROOMS', 'শোবার ঘর'],
+    [flat.bathrooms, 'BATHROOMS', 'বাথরুম'],
+    [flat.balconies, 'BALCONIES', 'বারান্দা']
+  ].filter(([value]) => Number.isInteger(value) && value >= 0);
+  const specsHtml = specs.length ? '<div class="flat-specs" aria-label="Flat details">' +
+    specs.map(([value, en, bn]) => '<span><b>' + value + '</b> <small data-en="' + en + '" data-bn="' + bn + '">' + en + '</small></span>').join('') +
+    '</div>' : '';
   const image = src ? `<img src="${escapeHtml(src)}" alt="Image for flat ${number}" loading="lazy" decoding="async">` : '<span data-en="IMAGE PENDING" data-bn="ছবি আসছে">IMAGE PENDING</span>';
   return `<article class="flat-row" id="flat-${number}">
     <span class="flat-no">/${number}</span>
-    <div class="flat-primary"><span class="flat-status ${free ? '' : 'occupied'}" data-en="${free ? 'AVAILABLE' : 'OCCUPIED'}" data-bn="${free ? 'ভাড়া দেওয়া হবে' : 'ভাড়া দেওয়া হয়েছে'}">${free ? 'AVAILABLE' : 'OCCUPIED'}</span><h3>${escapeHtml(flat.title || '1,100 Sq Ft Apartment')}</h3><p class="flat-description">${escapeHtml(flat.description || 'A comfortable space for everyday living.')}</p></div>
+    <div class="flat-primary"><span class="flat-status ${free ? '' : 'occupied'}" data-en="${free ? 'AVAILABLE' : 'OCCUPIED'}" data-bn="${free ? 'ভাড়া দেওয়া হবে' : 'ভাড়া দেওয়া হয়েছে'}">${free ? 'AVAILABLE' : 'OCCUPIED'}</span><h3>${escapeHtml(flat.title || '1,100 Sq Ft Apartment')}</h3><p class="flat-description">${escapeHtml(flat.description || 'A comfortable space for everyday living.')}</p>${specsHtml}</div>
     <div class="flat-price"><strong>${escapeHtml(flat.price || 'On request')}</strong><small data-en="PER MONTH" data-bn="প্রতি মাসে">PER MONTH</small></div>
     <div class="flat-image ${src ? '' : 'no-image'}">${image}</div>
   </article>`;
@@ -47,7 +56,7 @@ async function fetchFlats() {
     index.textContent = '101 / 102 / 301 / 302';
     return;
   }
-  const { data, error } = await client.from('rentals').select('flat_number,title,description,price,status,image_path').order('flat_number');
+  const { data, error } = await client.from('rentals').select('flat_number,title,description,price,status,image_path,bedrooms,bathrooms,balconies,area_sqft').order('flat_number');
   if (error) {
     container.innerHTML = '<p class="load-error">Could not load flats. Please refresh to try again.</p>';
     index.textContent = '101 / 102 / 301 / 302';
