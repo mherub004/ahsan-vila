@@ -48,3 +48,5 @@ footer{background:var(--ink);color:var(--paper)}.footer-inner{min-height:105px;d
 .channel-link:hover{color:#bd4b30;border-color:#bd4b30}
 @media(max-width:900px){.contact-wrap{grid-template-columns:1fr;gap:52px}.contact-heading h2{font-size:clamp(62px,10vw,100px)}}
 @media(max-width:520px){.contact-section{padding:70px 0 80px}.contact-heading h2{font-size:clamp(55px,13vw,75px)}.contact-fields{grid-template-columns:1fr}.contact-field.wide{grid-column:auto}.contact-channels{grid-template-columns:1fr}.contact-channel+.contact-channel{border-left:0;border-top:1px solid var(--line);padding-left:0;margin-top:18px}.contact-channel{padding-top:20px}}
+
+.contact-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:20px}.contact-actions .contact-submit{margin-top:0;min-height:58px;gap:8px}.contact-submit.secondary{background:transparent;color:var(--ink);border:1px solid var(--ink)}.contact-submit.secondary:hover:not(:disabled){background:var(--orange);border-color:var(--orange)}@media(max-width:520px){.contact-actions{grid-template-columns:1fr}}
