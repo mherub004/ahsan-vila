@@ -109,8 +109,8 @@ async function fetchContactSettings() {
   const email = data.contact_email?.trim();
   const whatsapp = data.whatsapp_number?.trim();
   contactSettings = {
-    email: email && /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$/.test(email) ? email : null,
-    whatsapp: whatsapp && /^\\+[1-9][0-9]{7,14}$/.test(whatsapp) ? whatsapp : null
+    email: email && /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(email) ? email : null,
+    whatsapp: whatsapp && /^\+[1-9][0-9]{7,14}$/.test(whatsapp) ? whatsapp : null
   };
   renderContactSettings();
 }
@@ -132,14 +132,14 @@ if (enquiryForm) {
     const details = enquiryDetails();
     if (!details) return;
     const subject = 'Ahsanvila flat enquiry' + (details.flat ? ' — Flat ' + details.flat : '');
-    const body = ['Name: ' + details.name, details.reply ? 'Reply email: ' + details.reply : '', 'Flat: ' + (details.flat || 'Not specified'), '', details.message].filter((line, index) => line || index === 3).join('\\n');
+    const body = ['Name: ' + details.name, details.reply ? 'Reply email: ' + details.reply : '', 'Flat: ' + (details.flat || 'Not specified'), '', details.message].filter((line, index) => line || index === 3).join('\n');
     window.location.href = 'mailto:' + contactSettings.email + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
   });
   document.getElementById('enquiry-whatsapp').addEventListener('click', () => {
     if (!contactSettings.whatsapp) return;
     const details = enquiryDetails();
     if (!details) return;
-    const body = ['Ahsanvila flat enquiry', 'Name: ' + details.name, details.reply ? 'Reply email: ' + details.reply : '', 'Flat: ' + (details.flat || 'Not specified'), '', details.message].filter(Boolean).join('\\n');
+    const body = ['Ahsanvila flat enquiry', 'Name: ' + details.name, details.reply ? 'Reply email: ' + details.reply : '', 'Flat: ' + (details.flat || 'Not specified'), '', details.message].filter(Boolean).join('\n');
     window.open('https://wa.me/' + contactSettings.whatsapp.slice(1) + '?text=' + encodeURIComponent(body), '_blank', 'noopener,noreferrer');
   });
 }
