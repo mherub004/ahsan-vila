@@ -74,6 +74,8 @@
                 <textarea id="item-desc" rows="3" placeholder="Details about rooms, facilities, deep tubewell water access, etc." required class="w-full px-4 py-2 border rounded-xl outline-none focus:ring-2 focus:ring-emerald-500"></textarea>
             </div>
 
+            <div><label class="block text-sm font-medium text-slate-600 mb-1" for="flat-image">Flat photo (JPG, PNG or WebP, up to 5 MB)</label><input id="flat-image" type="file" accept="image/jpeg,image/png,image/webp" class="w-full text-sm"><img id="image-preview" alt="Current flat photo" class="hidden mt-3 h-40 w-full object-cover rounded-xl"><p id="image-hint" class="text-xs text-slate-500 mt-2">Choose a photo to replace the current one when you save.</p></div>
+            <p id="save-message" role="status" class="text-sm"></p>
             <button type="submit" class="w-full bg-slate-900 text-white py-2.5 rounded-xl font-medium hover:bg-slate-800 transition">Save Flat Update</button>
         </form>
     </div>
@@ -89,6 +91,22 @@
         const uploadForm = document.getElementById('upload-form');
         const logoutBtn = document.getElementById('logout-btn');
         const flatSelect = document.getElementById('flat-number');
+        const imageInput = document.getElementById('flat-image');
+        const preview = document.getElementById('image-preview');
+        const message = document.getElementById('save-message');
+        const ADMIN_ID = 'c966a46d-3691-43f6-b7d1-100faaf61f58';
+        function setPhoto(path) {
+            preview.classList.toggle('hidden', !path);
+            if (path) preview.src = supabaseClient.storage.from('flat-images').getPublicUrl(path).data.publicUrl;
+            else preview.removeAttribute('src');
+        }
+        imageInput.addEventListener('change', () => {
+            const file = imageInput.files[0];
+            if (file) { preview.src = URL.createObjectURL(file); preview.classList.remove('hidden'); }
+        });
+        supabaseClient.auth.getUser().then(({ data }) => {
+            if (data.user && data.user.id === ADMIN_ID) { toggleView(true); loadSelectedFlatData(flatSelect.value); }
+        });
 
         loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -98,6 +116,9 @@
             const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
             if (error) {
                 alert('Login failed: ' + error.message);
+            } else if (data.user.id !== ADMIN_ID) {
+                await supabaseClient.auth.signOut();
+                alert('This account cannot edit flats.');
             } else {
                 toggleView(true);
                 loadSelectedFlatData(flatSelect.value);
@@ -116,11 +137,16 @@
                 document.getElementById('item-price').value = data.price || '';
                 document.getElementById('flat-status').value = data.status || 'Free For Rent';
                 document.getElementById('item-desc').value = data.description || '';
+                setPhoto(data.image_path);
+                imageInput.value = '';
             } else {
                 document.getElementById('item-title').value = '';
                 document.getElementById('item-price').value = '';
                 document.getElementById('flat-status').value = 'Free For Rent';
                 document.getElementById('item-desc').value = '';
+                setPhoto(null);
+                imageInput.value = '';
+                message.textContent = error ? 'Could not load this flat: ' + error.message : 'This flat has no record yet.';
             }
         }
 
@@ -136,16 +162,29 @@
             const status = document.getElementById('flat-status').value;
             const description = document.getElementById('item-desc').value;
 
-            // Changed from upsert to direct update using .eq() to match your existing table structure safely
-            const { error } = await supabaseClient
-                .from('rentals')
-                .update({ title, price, status, description })
-                .eq('flat_number', flat_number);
-            
-            if (error) {
-                alert('Error updating flat: ' + error.message);
-            } else {
-                alert(`Flat ${flat_number} details updated successfully!`);
+            message.textContent = 'Saving…';
+            const file = imageInput.files[0];
+            let image_path;
+            if (file) {
+                if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type) || file.size > 5 * 1024 * 1024) {
+                    message.textContent = 'Choose a JPG, PNG or WebP image under 5 MB.';
+                    return;
+                }
+                const extension = { 'image/jpeg': 'jpg', 'image/png': 'png', 'image/webp': 'webp' }[file.type];
+                image_path = 'flat-' + flat_number + '/' + crypto.randomUUID() + '.' + extension;
+                const { error: uploadError } = await supabaseClient.storage.from('flat-images').upload(image_path, file, { contentType: file.type, upsert: false });
+                if (uploadError) { message.textContent = 'Photo upload failed: ' + uploadError.message; return; }
+            }
+            const changes = { title, price, status, description };
+            if (image_path) changes.image_path = image_path;
+            const { data: updated, error } = await supabaseClient.from('rentals')
+                .update(changes).eq('flat_number', flat_number).select('flat_number,image_path');
+            if (error) message.textContent = 'Save failed: ' + error.message;
+            else if (!updated || updated.length !== 1) message.textContent = 'No flat was updated. Check your account and the flat record.';
+            else {
+                message.textContent = 'Flat ' + flat_number + ' saved.';
+                imageInput.value = '';
+                setPhoto(updated[0].image_path);
             }
         });
 
